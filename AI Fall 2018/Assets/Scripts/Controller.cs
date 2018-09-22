@@ -4,13 +4,39 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour {
 
-    public float speed = 10.0f;
+    public float moveSpeed;
 
-    void Update()
+    private Vector3 moveInput;
+    private Vector3 moveVelocity;
+    private Rigidbody rb;
+    private Camera mainCamera;
+
+    private void Start()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        rb = GetComponent<Rigidbody>();
+        mainCamera = FindObjectOfType<Camera>();
+    }
 
-        transform.Translate(speed * moveHorizontal * Time.deltaTime, 0.0f, speed * moveVertical * Time.deltaTime);
+    private void Update()
+    {
+        moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical"));
+        moveVelocity = moveInput * moveSpeed;
+
+        Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        float rayLength;
+
+        if (groundPlane.Raycast(cameraRay, out rayLength))
+        {
+            Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+            Debug.DrawLine(cameraRay.origin, pointToLook, Color.red);
+
+            transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        rb.velocity = moveVelocity;
     }
 }
