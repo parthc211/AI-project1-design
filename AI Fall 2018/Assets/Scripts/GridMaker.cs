@@ -35,14 +35,11 @@ public class GridMaker : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Vector3 start = new Vector3(50, 10, -50);
-        Vector3 end = terrain.terrainData.size;
-        Debug.Log(start);
-        Debug.Log(end);
-        int i, j,x=50, z=-50;
-        Debug.LogFormat("" + x + " " + z);
+        Vector3 end = terrain.terrainData.size
+        int i, j, x = 50, z = -50;
         int radius = 1;
         Debug.LogFormat(""+Terrain.activeTerrain.SampleHeight(new Vector3(-47,0,-16)));
-        StreamWriter sw = new StreamWriter("test.txt");
+        //StreamWriter sw = new StreamWriter("test.txt");
         int h;
         for (i = 0, x = -50; i < 100 && x <= 50; i++,x++)
         {
@@ -50,11 +47,11 @@ public class GridMaker : MonoBehaviour {
             {
 
                 //new Vector3(x,10, z)
-                int height = (int)terrain.SampleHeight(new Vector3(x, 0, z)); ;
-                h = (height > 7) ? (height!=9)? 1 : 9 : 0;
+                h = (int)terrain.SampleHeight(new Vector3(x, 0, z)); ;
+                h = (h > 7)? h : 0;
                 
                 // check for unwalkable layer
-                if (Physics.CheckSphere(new Vector3(x, height, z), radius,unWalkableMask))
+                if (Physics.CheckSphere(new Vector3(x, h, z), radius,unWalkableMask))
                 {
                     h = 0;
                 }
@@ -70,9 +67,11 @@ public class GridMaker : MonoBehaviour {
                     Debug.Log(i + " " + j);
                     h = 9;
                 }
-                h = (h > 0) ? 1 : 0;
+
+                //check for unwalkable heights
+                h = (h > 14) ? 0 : h;
                 grid[i, j] = new Node(h, new Vector3(x, h, z));
-                sw.Write(grid[i, j].Height + " ");
+                //sw.Write(grid[i, j].Height + " ");
 
                 
                     
@@ -80,11 +79,11 @@ public class GridMaker : MonoBehaviour {
                 
             }
             
-            sw.WriteLine();
+            //sw.WriteLine();
             //Debug.Log("\n");
         }
-        Debug.LogFormat("" + x + " " + z+" "+grid[96,34]);
-        sw.Close();
+        
+       //sw.Close();
         
         
 	}
@@ -94,17 +93,19 @@ public class GridMaker : MonoBehaviour {
 		
 	}
 
-    public void OnDrawGizmos()
-    {
-        //Draw Logic
-        if(grid!=null)
-        for (int i = 0; i < 100; i++)
-        {
-            for (int j = 0; j < 100; j++)
-            {
-                Gizmos.color = (grid[i,j].Height != 0) ? Color.white : Color.red;
-                Gizmos.DrawCube(grid[i,j].Position, new Vector3(1, 1, 1));
-            }
-        }
-    }
+    //public void OnDrawGizmos()
+    //{
+    //    //Draw Logic
+    //    if (grid != null)
+    //    {
+    //        for (int i = 0; i < 100; i++)
+    //        {
+    //            for (int j = 0; j < 100; j++)
+    //            {
+    //                Gizmos.color = (grid[i, j].Height != 0) ? Color.white : Color.red;
+    //                Gizmos.DrawCube(grid[i, j].Position, new Vector3(1, 1, 1));
+    //            }
+    //        }
+    //    }
+    //}       
 }
