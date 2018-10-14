@@ -35,7 +35,7 @@ public class GridMaker : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Vector3 start = new Vector3(50, 10, -50);
-        Vector3 end = terrain.terrainData.size
+        Vector3 end = terrain.terrainData.size;
         int i, j, x = 50, z = -50;
         int radius = 1;
         Debug.LogFormat(""+Terrain.activeTerrain.SampleHeight(new Vector3(-47,0,-16)));
