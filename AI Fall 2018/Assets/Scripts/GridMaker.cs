@@ -24,7 +24,7 @@ public class Node{
         position = pos;
         gridX = gridXpos;
         gridY = gridYpos;
-        if(h == 0)
+        if(h == 0 || h<=7||h>=14)
         {
             isWalkable = false;
         }
@@ -47,6 +47,11 @@ public class Node{
         {
             return position;
         }
+    }
+
+    public int Fcost
+    {
+        get{ return fCost; }
     }
 }
 
@@ -77,8 +82,7 @@ public class GridMaker : MonoBehaviour {
             {
 
                 //new Vector3(x,10, z)
-                h = (int)terrain.SampleHeight(new Vector3(x, 0, z)); ;
-                h = (h > 7)? h : 0;
+                h = (int)terrain.SampleHeight(new Vector3(x, 0, z)); 
                 
                 // check for unwalkable layer
                 if (Physics.CheckSphere(new Vector3(x, h, z), radius,unWalkableMask))
@@ -98,8 +102,7 @@ public class GridMaker : MonoBehaviour {
                     h = 9;
                 }
 
-                //check for unwalkable heights
-                h = (h > 14) ? 0 : h;
+
                 grid[i, j] = new Node(h, new Vector3(x, h, z), i, j);
                 sw.Write(grid[i, j].Height + " ");
 
@@ -126,19 +129,20 @@ public class GridMaker : MonoBehaviour {
     //get a node from a world point
     public Node GetNodeFromWorld(Vector3 worldPos)
     {
-        //get the x and y % of the terrain size at the node's location
-        float percentX = (worldPos.x + gridSizeInWorld.x / 2) / gridSizeInWorld.x;
-        float percentY = (worldPos.y + gridSizeInWorld.y / 2) / gridSizeInWorld.y;
-        //clamp to keep the % between 0 and 1 so it doesn't go out of bounds
-        percentX = Mathf.Clamp01(percentX);
-        percentY = Mathf.Clamp01(percentY);
-
-        //Node Diameter is 2? This equation may be wrong and may be causing the error. It needs to find the world position of the node
-        int x = (int)((Mathf.RoundToInt(gridSizeInWorld.x / 2) - 1) * percentX);
-        int y = (int)((Mathf.RoundToInt(gridSizeInWorld.y / 2) - 1) * percentY);
-        
-        //return the node on the grid
-        //This is currently throwing an error, it must not be the correct point
+        int x;
+        int y=0;
+        Debug.Log("actual"+worldPos.x + " " + worldPos.y + " " + worldPos.z);
+        for (x=0;x<100; x++)
+        {
+            for (y=0; y < 100; y++)
+            {
+                Debug.Log("node"+grid[x, y].Position.x + " " + grid[x, y].Position.y + " " + grid[x, y].Position.z);
+                if(grid[x,y].Position.x == (int)worldPos.x && grid[x, y].Position.z == (int)worldPos.z)
+                {
+                    break;
+                }
+            }
+        }
         return grid[x,y];
     }
 
@@ -175,21 +179,22 @@ public class GridMaker : MonoBehaviour {
         return neighbors;
     }
 
-    /*
+    public List<Node> path;
     public void OnDrawGizmos()
     {
         //Draw Logic
         if (grid != null)
         {
-            for (int i = 0; i < 100; i++)
+            foreach(Node n in grid)
             {
-                for (int j = 0; j < 100; j++)
+                if (path != null)
                 {
-                    Gizmos.color = (grid[i, j].Height != 0) ? Color.white : Color.red;
-                    Gizmos.DrawCube(grid[i, j].Position, new Vector3(1, 1, 1));
+                    if(path.Contains(n)){
+                        Gizmos.color = Color.gray;
+                        Gizmos.DrawCube(n.Position, Vector3.one);
+                    }
                 }
             }
         }
-    }
-    */       
+    } 
 }

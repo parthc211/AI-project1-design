@@ -22,21 +22,24 @@ public class Pathfinding : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
         FindPath(seeker.position, target.position);
 	}
 
     //Find the path between the seeker and target
     void FindPath(Vector3 startPos, Vector3 targetPos)
     {
+        Debug.Log("Starting the serch");
         Node startNode = grid.GetNodeFromWorld(startPos);
         Node targetNode = grid.GetNodeFromWorld(targetPos);
-
+       
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();
         openSet.Add(startNode);
 
+
         //loop through the open set
-        while(openSet.Count > 0)
+        while (openSet.Count > 0)
         {
             Node currentNode = openSet[0];
             for(int i = 0; i < openSet.Count; i++)
@@ -50,9 +53,12 @@ public class Pathfinding : MonoBehaviour {
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
 
-            if(currentNode == targetNode)
+            Debug.Log("start");
+
+            if (currentNode == targetNode)
             {
                 RetracePath(startNode, targetNode);
+                Debug.Log("end");
                 return;
             }
 
@@ -98,6 +104,7 @@ public class Pathfinding : MonoBehaviour {
         }
         //path is backwards, reverse it
         path.Reverse();
+        Debug.Log("1");
 
     }
 
