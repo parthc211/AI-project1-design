@@ -2,115 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Member : MonoBehaviour {
+public class Member : MonoBehaviour
+{
 
     public Vector3 position;
     public Vector3 velocity;
     public Vector3 acceleration;
-    char movement = 'c';
+
     public Level level;
     public MemberConfig conf;
+
     private Vector3 wanderTarget;
-    Rigidbody rb;
-    private void Start ()
+    private Rigidbody rb;
+
+    private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         level = FindObjectOfType<Level>();
         conf = FindObjectOfType<MemberConfig>();
-        rb = GetComponent<Rigidbody>();
 
         position = transform.position;
-        velocity = new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3));
-        
     }
 
     private void Update()
     {
-        // The units here are moved using transform.position
-        // After calculating the acceleration and stuff, we need to move them using rigidbody
-        // I think it would be something like rigidbody.AddForce() function
-
-        // TODO: add keyboard inputs to change the value of different attributes of the using keystrokes
-        //Debug.Log("movement:" + movement);
-        if (Input.anyKeyDown)
-        {
-            //Modify Wander priority
-            if (Input.GetKeyDown("w"))
-            {
-                conf.wanderPriority += 10;
-            }
-            if (Input.GetKeyDown("q"))
-            {
-                conf.wanderPriority -= 10;
-            }
-
-            //Modify Cohesion priority
-            if (Input.GetKeyDown("c"))
-            {
-                conf.cohesionPriority += 10;
-            }
-            if (Input.GetKeyDown("d"))
-            {
-                conf.cohesionPriority -= 10;
-            }
-
-            //Mopdify alignment priority
-            if (Input.GetKeyDown("l"))
-            {
-                conf.alignmentPriority += 10;
-            }
-            if (Input.GetKeyDown("k"))
-            {
-                conf.alignmentPriority -= 10;
-            }
-
-            //modify seperation priority
-            if (Input.GetKeyDown("s"))
-            {
-                conf.separationPriority += 10;
-            }
-            if (Input.GetKeyDown("z"))
-            {
-                conf.separationPriority -= 10;
-            }
-
-            //modify avoidance proprty
-
-            if (Input.GetKeyDown("v")){
-                conf.avoidancePriority += 10;
-            }
-            if (Input.GetKeyDown("b"))
-            {
-                conf.avoidancePriority -= 10;
-            }
-
-
-        }
-
-
-        
-        
-
-        // TODO: move the members using Rigidbody instead of transforms
-    }
-
-    public void FixedUpdate(){
-        acceleration = Combine() * 10000*Time.deltaTime;
+        acceleration = Combine();
         acceleration = Vector3.ClampMagnitude(acceleration, conf.maxAcceleration);
-
-
 
         velocity = velocity + acceleration * Time.deltaTime;
         velocity = Vector3.ClampMagnitude(velocity, conf.maxVelocity);
-
-        velocity.y = 0;
-
-        position = position + velocity * Time.deltaTime;
-
-        transform.position = position;
-       
     }
 
-   
+    private void FixedUpdate()
+    {
+        rb.MovePosition(transform.position + velocity * Time.deltaTime);
+    }
 
     // Calculate the Wander of a member
     protected Vector3 Wander()
@@ -141,7 +67,7 @@ public class Member : MonoBehaviour {
 
         foreach (var member in neighbors)
         {
-            if(IsInFOV(member.position))
+            if (IsInFOV(member.position))
             {
                 cohesionVector += member.position;
                 countMembers++;
@@ -170,9 +96,9 @@ public class Member : MonoBehaviour {
 
         foreach (var member in members)
         {
-            if(IsInFOV(member.position))
+            if (IsInFOV(member.position))
             {
-                alignVector += member.velocity; 
+                alignVector += member.velocity;
             }
         }
 
@@ -191,11 +117,11 @@ public class Member : MonoBehaviour {
 
         foreach (var member in members)
         {
-            if(IsInFOV(member.position))
+            if (IsInFOV(member.position))
             {
                 Vector3 movingTowards = this.position - member.position;
-                
-                if(movingTowards.magnitude > 0)
+
+                if (movingTowards.magnitude > 0)
                 {
                     separateVector += movingTowards.normalized / movingTowards.magnitude;
                 }

@@ -29,4 +29,47 @@ public class MemberConfig : MonoBehaviour {
     // Avoidance Variables
     public float avoidanceRadius;
     public float avoidancePriority;
+
+    private void Update()
+    {
+        // Wander Priority manipulation
+        if(Input.GetKey(KeyCode.W))
+        {
+            wanderPriority += 1 * Time.deltaTime;
+        }
+        if(Input.GetKey(KeyCode.Q))
+        {
+            wanderPriority -= 1 * Time.deltaTime;
+        }
+
+        // Cohesion Priority manipulation
+        if (Input.GetKey(KeyCode.C))
+        {
+            cohesionPriority += 1 * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            cohesionPriority -= 1 * Time.deltaTime;
+        }
+
+        // Alignment Priority manipulation
+        if (Input.GetKey(KeyCode.L))
+        {
+            alignmentPriority += 1 * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.K))
+        {
+            alignmentPriority -= 1 * Time.deltaTime;
+        }
+
+        // Separation Priority manipulation
+        if (Input.GetKey(KeyCode.S))
+        {
+            separationPriority += 1 * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            separationPriority -= 1 * Time.deltaTime;
+        }
+    }
 }

@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level : MonoBehaviour {
+public class Level : MonoBehaviour
+{
 
     public Transform memberPrefab;
     public Transform enemyPrefab;
-    public int numberOfMembers=20;
-    public int numberOfEnemies=10;
+    public int numberOfMembers;
+    public int numberOfEnemies;
     public List<Member> members;
     public List<Enemy> enemies;
     public float bounds;
     public float spawnRadius;
-    public Terrain terrain;
-    private void Start ()
+
+    private void Start()
     {
         // Initializes the members and enemies list
         members = new List<Member>();
@@ -21,51 +22,21 @@ public class Level : MonoBehaviour {
 
         // Spawns member units and enemies, whose quantity can be changed in the editor
         // using the Inspector
-        //Spawn(memberPrefab, numberOfMembers);
-        //Spawn(enemyPrefab, numberOfEnemies);
-        Spawn(20);
+        Spawn(memberPrefab, numberOfMembers);
+        Spawn(enemyPrefab, numberOfEnemies);
+
         // Adds the spawned members to the above initalized list
         members.AddRange(FindObjectsOfType<Member>());
         enemies.AddRange(FindObjectsOfType<Enemy>());
-	}
+    }
 
     // Generic Spawn function, takes in 2 parameters
     // The type of unit we want to spawn and the number of units we want to spawn
-    private void Spawn(int count)
+    private void Spawn(Transform prefab, int count)
     {
-        //Spawning enemies
-        float x,y, z;
-        
-        Vector3 pos ;
-        for (int i = -50; i <= 50; i++)
+        for (int i = 0; i < count; i++)
         {
-            for (int j = -50; j <= 50; j++)
-            {
-                if (i == 50 || i == -50 || j == 50 || j == -50)
-                {
-                    y = (int)terrain.SampleHeight(new Vector3(i, 0, j));
-                    y += 1.5f;
-                    Instantiate(enemyPrefab, new Vector3(i, y, j), Quaternion.identity);
-                }
-            }
-        }
-
-
-        //Spawning units
-        for (int i = 0; i < 40; i++)
-        {
-            x = Random.Range(-50,50);
-            z = Random.Range(-50,50);
-
-            y = (int)terrain.SampleHeight(new Vector3(x, 0, z));
-            if (y >12 || y<10)
-            {
-                i--;
-            }
-            else {
-                y += 1;
-                Instantiate(memberPrefab, new Vector3(x, y, z), Quaternion.identity);
-            }
+            Instantiate(prefab, new Vector3(Random.Range(-spawnRadius, spawnRadius), transform.position.y, Random.Range(-spawnRadius, spawnRadius)), Quaternion.identity);
         }
     }
 
@@ -78,7 +49,7 @@ public class Level : MonoBehaviour {
         // Initialize a list to store the neighbors found
         List<Member> neighborsFound = new List<Member>();
 
-        foreach(var otherMember in members)
+        foreach (var otherMember in members)
         {
             // if we are looking at the member itself we don't want to add it as a neighbor
             // so we continue
@@ -86,7 +57,7 @@ public class Level : MonoBehaviour {
                 continue;
 
             // Add the member as neighbor if it is in the defined radius
-            if(Vector3.Distance(member.transform.position, otherMember.transform.position) <= radius)
+            if (Vector3.Distance(member.transform.position, otherMember.transform.position) <= radius)
             {
                 neighborsFound.Add(otherMember);
             }
