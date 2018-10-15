@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11747,8 +11747,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 572871648}
-  m_LocalRotation: {x: 0.42812595, y: 0.3322798, z: 0.17297393, w: -0.8224222}
-  m_LocalPosition: {x: -9.47, y: -50.26626, z: -12.21}
+  m_LocalRotation: {x: 0.2044036, y: 0.7252262, z: 0.2426013, w: -0.6110735}
+  m_LocalPosition: {x: 63.911617, y: -24.40098, z: 1.6898694}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -12779,6 +12779,7 @@ GameObject:
   - component: {fileID: 625777072}
   - component: {fileID: 625777071}
   - component: {fileID: 625777070}
+  - component: {fileID: 625777076}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -12801,6 +12802,7 @@ MonoBehaviour:
   unWalkableMask:
     serializedVersion: 2
     m_Bits: 512
+  gridSizeInWorld: {x: 0, y: 0}
 --- !u!54 &625777071
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12877,12 +12879,25 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 625777069}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.9, y: 11.34, z: 0.5}
+  m_LocalPosition: {x: 41.06, y: 11.34, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 35
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &625777076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 625777069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 389391adc95532943ade26656cb12e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seeker: {fileID: 625777075}
+  target: {fileID: 396769689}
 --- !u!1 &625838893 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 151830, guid: 6cec304f27f918d44b808e7706ea004d,
