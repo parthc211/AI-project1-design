@@ -7,20 +7,21 @@ public class Member : MonoBehaviour {
     public Vector3 position;
     public Vector3 velocity;
     public Vector3 acceleration;
-
+    char movement = 'c';
     public Level level;
     public MemberConfig conf;
-
     private Vector3 wanderTarget;
-
-	private void Start ()
+    Rigidbody rb;
+    private void Start ()
     {
         level = FindObjectOfType<Level>();
         conf = FindObjectOfType<MemberConfig>();
+        rb = GetComponent<Rigidbody>();
 
         position = transform.position;
         velocity = new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3));
-	}
+        
+    }
 
     private void Update()
     {
@@ -29,9 +30,74 @@ public class Member : MonoBehaviour {
         // I think it would be something like rigidbody.AddForce() function
 
         // TODO: add keyboard inputs to change the value of different attributes of the using keystrokes
+        //Debug.Log("movement:" + movement);
+        if (Input.anyKeyDown)
+        {
+            //Modify Wander priority
+            if (Input.GetKeyDown("w"))
+            {
+                conf.wanderPriority += 10;
+            }
+            if (Input.GetKeyDown("q"))
+            {
+                conf.wanderPriority -= 10;
+            }
 
-        acceleration = Combine();
+            //Modify Cohesion priority
+            if (Input.GetKeyDown("c"))
+            {
+                conf.cohesionPriority += 10;
+            }
+            if (Input.GetKeyDown("d"))
+            {
+                conf.cohesionPriority -= 10;
+            }
+
+            //Mopdify alignment priority
+            if (Input.GetKeyDown("l"))
+            {
+                conf.alignmentPriority += 10;
+            }
+            if (Input.GetKeyDown("k"))
+            {
+                conf.alignmentPriority -= 10;
+            }
+
+            //modify seperation priority
+            if (Input.GetKeyDown("s"))
+            {
+                conf.separationPriority += 10;
+            }
+            if (Input.GetKeyDown("z"))
+            {
+                conf.separationPriority -= 10;
+            }
+
+            //modify avoidance proprty
+
+            if (Input.GetKeyDown("v")){
+                conf.avoidancePriority += 10;
+            }
+            if (Input.GetKeyDown("b"))
+            {
+                conf.avoidancePriority -= 10;
+            }
+
+
+        }
+
+
+        
+        
+
+        // TODO: move the members using Rigidbody instead of transforms
+    }
+
+    public void FixedUpdate(){
+        acceleration = Combine() * 10000*Time.deltaTime;
         acceleration = Vector3.ClampMagnitude(acceleration, conf.maxAcceleration);
+
+
 
         velocity = velocity + acceleration * Time.deltaTime;
         velocity = Vector3.ClampMagnitude(velocity, conf.maxVelocity);
@@ -41,9 +107,10 @@ public class Member : MonoBehaviour {
         position = position + velocity * Time.deltaTime;
 
         transform.position = position;
-
-        // TODO: move the members using Rigidbody instead of transforms
+       
     }
+
+   
 
     // Calculate the Wander of a member
     protected Vector3 Wander()
