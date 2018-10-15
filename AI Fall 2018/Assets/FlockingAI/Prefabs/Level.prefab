@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b147dc92172a2e4ba2af0d4bc20dab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  memberPrefab: {fileID: 4370925843150010, guid: c89443caf0005124089d73837ca5b3dc,
+  memberPrefab: {fileID: 4317321302421752, guid: 8df2f9f52fc07df4081b9ed8d9ca7cc6,
     type: 2}
   enemyPrefab: {fileID: 4370925843150010, guid: a4bddca3dbb1d8b49a3bea4dc493c7b9,
     type: 2}

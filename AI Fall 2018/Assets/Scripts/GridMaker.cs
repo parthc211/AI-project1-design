@@ -143,7 +143,9 @@ public class GridMaker : MonoBehaviour {
                 }
             }
         }
-        return grid[x,y];
+        //return grid[x,y];
+
+        return grid[0, 0];
     }
 
     // Get the neighboring nodes that can be travelled to
