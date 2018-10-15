@@ -7,10 +7,33 @@ public class Node{
     int height;
     Vector3 position;
 
-    public Node(int h,Vector3 pos)
+    public int gCost; // cost to travel to node, based on height
+    public int hCost; // based on grid distance
+    public int fCost; //gCost + hCost
+
+    public int gridX; // the x position in the grid
+    public int gridY; // the y position in the grid
+
+    public bool isWalkable; 
+
+    public Node parent;
+
+    public Node(int h,Vector3 pos, int gridXpos, int gridYpos)
     {
         height = h;
         position = pos;
+        gridX = gridXpos;
+        gridY = gridYpos;
+        if(h == 0)
+        {
+            isWalkable = false;
+        }
+        else
+        {
+            isWalkable = true;
+        }
+
+        gCost = height; // g cost is set to the height for now. It should really be the difference in height between the starting node and this node
     }
 
     public int Height
@@ -29,8 +52,10 @@ public class Node{
 
 public class GridMaker : MonoBehaviour {
     public Terrain terrain;
-    Node[,] grid = new Node[100, 100];
+    public Node[,] grid = new Node[100, 100];
     public LayerMask unWalkableMask;
+
+    public Vector2 gridSizeInWorld;
 
 	// Use this for initialization
 	void Start () {
@@ -39,7 +64,12 @@ public class GridMaker : MonoBehaviour {
         int i, j, x = 50, z = -50;
         int radius = 1;
         Debug.LogFormat(""+Terrain.activeTerrain.SampleHeight(new Vector3(-47,0,-16)));
-        //StreamWriter sw = new StreamWriter("test.txt");
+
+        gridSizeInWorld = terrain.terrainData.size;
+
+        //writes a grid of node G costs to a text file
+        StreamWriter sw = new StreamWriter("test.txt");
+
         int h;
         for (i = 0, x = -50; i < 100 && x <= 50; i++,x++)
         {
@@ -70,8 +100,8 @@ public class GridMaker : MonoBehaviour {
 
                 //check for unwalkable heights
                 h = (h > 14) ? 0 : h;
-                grid[i, j] = new Node(h, new Vector3(x, h, z));
-                //sw.Write(grid[i, j].Height + " ");
+                grid[i, j] = new Node(h, new Vector3(x, h, z), i, j);
+                sw.Write(grid[i, j].Height + " ");
 
                 
                     
@@ -79,11 +109,11 @@ public class GridMaker : MonoBehaviour {
                 
             }
             
-            //sw.WriteLine();
+            sw.WriteLine();
             //Debug.Log("\n");
         }
         
-       //sw.Close();
+       sw.Close();
         
         
 	}
@@ -93,19 +123,73 @@ public class GridMaker : MonoBehaviour {
 		
 	}
 
-    //public void OnDrawGizmos()
-    //{
-    //    //Draw Logic
-    //    if (grid != null)
-    //    {
-    //        for (int i = 0; i < 100; i++)
-    //        {
-    //            for (int j = 0; j < 100; j++)
-    //            {
-    //                Gizmos.color = (grid[i, j].Height != 0) ? Color.white : Color.red;
-    //                Gizmos.DrawCube(grid[i, j].Position, new Vector3(1, 1, 1));
-    //            }
-    //        }
-    //    }
-    //}       
+    //get a node from a world point
+    public Node GetNodeFromWorld(Vector3 worldPos)
+    {
+        //get the x and y % of the terrain size at the node's location
+        float percentX = (worldPos.x + gridSizeInWorld.x / 2) / gridSizeInWorld.x;
+        float percentY = (worldPos.y + gridSizeInWorld.y / 2) / gridSizeInWorld.y;
+        //clamp to keep the % between 0 and 1 so it doesn't go out of bounds
+        percentX = Mathf.Clamp01(percentX);
+        percentY = Mathf.Clamp01(percentY);
+
+        //Node Diameter is 2? This equation may be wrong and may be causing the error. It needs to find the world position of the node
+        int x = (int)((Mathf.RoundToInt(gridSizeInWorld.x / 2) - 1) * percentX);
+        int y = (int)((Mathf.RoundToInt(gridSizeInWorld.y / 2) - 1) * percentY);
+        
+        //return the node on the grid
+        //This is currently throwing an error, it must not be the correct point
+        return grid[x,y];
+    }
+
+    // Get the neighboring nodes that can be travelled to
+    public List<Node> GetNeighbors(Node node)
+    {
+        List<Node> neighbors = new List<Node>();
+
+        for(int x = -1; x <= 1; x++)
+        {
+            for(int y = -1; y <= 1; y++)
+            {
+                //skip this one
+                if (x == 0 && y == 0)
+                {
+                    
+                }
+                else
+                {
+                    int checkX = node.gridX + x;
+                    int checkY = node.gridY + y;
+
+                    // check if it is within the bounds of the grid
+                    if (checkX >= 0 && checkX < gridSizeInWorld.x && checkY >= 0 && checkY < gridSizeInWorld.y)
+                    {
+                        //add it to the grid of neighbors
+                        neighbors.Add(grid[checkX, checkY]);
+                    }
+                }
+                
+            }
+        }
+
+        return neighbors;
+    }
+
+    /*
+    public void OnDrawGizmos()
+    {
+        //Draw Logic
+        if (grid != null)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j < 100; j++)
+                {
+                    Gizmos.color = (grid[i, j].Height != 0) ? Color.white : Color.red;
+                    Gizmos.DrawCube(grid[i, j].Position, new Vector3(1, 1, 1));
+                }
+            }
+        }
+    }
+    */       
 }
