@@ -36,7 +36,7 @@ public class Level : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            Instantiate(prefab, new Vector3(Random.Range(-spawnRadius, spawnRadius), transform.position.y, Random.Range(-spawnRadius, spawnRadius)), Quaternion.identity);
+            Instantiate(prefab, new Vector3(Random.Range(-spawnRadius, spawnRadius) + transform.position.x, transform.position.y, Random.Range(-spawnRadius, spawnRadius) + transform.position.z), Quaternion.identity);
         }
     }
 
