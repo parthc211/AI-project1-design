@@ -20,7 +20,7 @@ public class InfluenceMap : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if(Input.GetKeyDown(KeyCode.G))
+        if(Input.GetKeyDown(KeyCode.G) && !TextureImage.activeSelf)
         {
             TextureImage.SetActive(true);
 
@@ -29,6 +29,11 @@ public class InfluenceMap : MonoBehaviour {
             Debug.Log("Initial Values " + initalNodes.Count);
 
             CreateInfluenceMap();
+        }
+
+        if(TextureImage.activeSelf && Input.GetKeyDown(KeyCode.X))
+        {
+            TextureImage.SetActive(false);
         }
 	}
 
@@ -64,7 +69,7 @@ public class InfluenceMap : MonoBehaviour {
             {
                 Color pixelColor;
                 
-                pixelColor.r = gridNodes[i, j].GetStrength() * 50;
+                pixelColor.r = gridNodes[i, j].GetStrength() * 2;
                 pixelColor.g = 0;
                 pixelColor.b = 0;
                 pixelColor.a = 255;
