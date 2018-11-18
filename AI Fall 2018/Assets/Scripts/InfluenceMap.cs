@@ -7,7 +7,8 @@ public class InfluenceMap : MonoBehaviour {
 
     public Spawner spawner;
     public List<Node> initalNodes = new List<Node>();
-
+    public List<int> xPosNode = new List<int>();
+    public List<int> zPosNode = new List<int>();
     public GameObject TextureImage;
 
     //public Texture2D influenceMapTexture;
@@ -22,11 +23,12 @@ public class InfluenceMap : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.G))
         {
+            CalculateLinearDrop();
+            CalculateLinearDrop();
+            CalculateLinearDrop();
+            CalculateLinearDrop();
+
             TextureImage.SetActive(true);
-
-            initalNodes = GetInitialNodesWithInfluences();
-
-            Debug.Log("Initial Values " + initalNodes.Count);
 
             CreateInfluenceMap();
         }
@@ -37,7 +39,27 @@ public class InfluenceMap : MonoBehaviour {
         }
 	}
 
-    public List<Node> GetInitialNodesWithInfluences()
+    public void CalculateLinearDrop()
+    {
+        int change = 0;
+        List<Node> iNodes = GetNodesWithInfluences();
+
+        foreach (Node n in iNodes)
+        {
+            foreach (Node neighbor in n.neighbors)
+            {
+                if (n.GetStrength() > neighbor.GetStrength())
+                {
+                    neighbor.SetStrength(n.GetStrength() - 1);
+                    change++;
+                    Debug.Log(change);
+                }
+            }
+        }
+
+    }
+
+    public List<Node> GetNodesWithInfluences()
     {
         Node[,] gridNodes = spawner.GetGrid();
         
@@ -57,6 +79,8 @@ public class InfluenceMap : MonoBehaviour {
         return nodes;
     }
 
+    
+
     public void CreateInfluenceMap()
     {
         Texture2D influenceMapTexture = new Texture2D(100, 100, TextureFormat.ARGB32, false);
@@ -67,6 +91,7 @@ public class InfluenceMap : MonoBehaviour {
         {
             for(int j = 0; j < gridNodes.GetLength(1); j++)
             {
+
                 
 
                 Color pixelColor;
@@ -79,7 +104,41 @@ public class InfluenceMap : MonoBehaviour {
                 pixelColor.g = gridNodes[i,j].nodeColor.g * gridNodes[i, j].GetStrength();
                 pixelColor.b = gridNodes[i, j].nodeColor.b * gridNodes[i, j].GetStrength();
                 pixelColor.a = 255;
-                
+          
+    /*
+                Color pixelColor = new Color(0, 0, 0);
+
+                if(gridNodes[i, j].GetStrength() == 1)
+                {
+                    pixelColor.r = 255;
+                    pixelColor.g = 0;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == 2)
+                {
+                    pixelColor.r = 200;
+                    pixelColor.g = 0;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == 3)
+                {
+                    pixelColor.r = 150;
+                    pixelColor.g = 0;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == 4)
+                {
+                    pixelColor.r = 100;
+                    pixelColor.g = 0;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+     */
+
+                //ed1a9bb4a2df2f84fb5a9d2ec614563db8b6a9db
 
                 influenceMapTexture.SetPixel(i, j, pixelColor);
             }

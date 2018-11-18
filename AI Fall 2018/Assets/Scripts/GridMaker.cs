@@ -10,6 +10,8 @@ public class Node {
     int strength = 0;
     public Color nodeColor;
 
+    public List<Node> neighbors = new List<Node>();
+
     public Node(Vector3 pos)
     {
         position = pos;
@@ -60,6 +62,16 @@ public class Node {
                 nodeColor = Color.green;
             }
         }
+
+        if(strength > 4)
+        {
+            strength = 4;
+        }
+    }
+
+    public void SetStrength(int _strength)
+    {
+        strength = _strength;
     }
 
     public int GetStrength()
@@ -97,8 +109,69 @@ public class GridMaker{
             sw.WriteLine();
         }
 
+        GetNeighbors();
+
         sw.Close();
 	}
+
+    public void GetNeighbors()
+    {
+        int x = 100;
+        int y = 100;
+
+        for(int i = 0; i < x; i++)
+        {
+            for(int j = 0; j < y; j++)
+            {
+                if (i % x == 0)    //Column on the far left
+                {
+                    grid[i, j].neighbors.Add(grid[i + 1, j]);
+                    if (j % y == 0)    //Bottom Left Corner
+                        grid[i, j].neighbors.Add(grid[i, j + 1]);
+                    else if (j % y == y - 1)    //Top Left Corner
+                        grid[i, j].neighbors.Add(grid[i, j - 1]);
+                    else
+                    {
+                        grid[i, j].neighbors.Add(grid[i, j - 1]);
+                        grid[i, j].neighbors.Add(grid[i, j + 1]);
+                    }
+
+                }
+                else if (i % x == x - 1)    //Column on the far right
+                {
+                    grid[i, j].neighbors.Add(grid[i - 1, j]);
+                    if (j % y == 0)    //Bottom Left Corner
+                        grid[i, j].neighbors.Add(grid[i, j + 1]);
+                    else if (j % y == y - 1)
+                        grid[i, j].neighbors.Add(grid[i, j - 1]);
+                    else
+                    {
+                        grid[i, j].neighbors.Add(grid[i, j - 1]);
+                        grid[i, j].neighbors.Add(grid[i, j + 1]);
+                    }
+                }
+                else if (j % y == 0)  //Bottom Row (sides excluded)
+                {
+                    grid[i, j].neighbors.Add(grid[i, j + 1]);
+                    grid[i, j].neighbors.Add(grid[i + 1, j]);
+                    grid[i, j].neighbors.Add(grid[i - 1, j]);
+                }
+                else if (j % y == y - 1)    //Top Row (sides excluded)
+                {
+                    grid[i, j].neighbors.Add(grid[i, j - 1]);
+                    grid[i, j].neighbors.Add(grid[i + 1, j]);
+                    grid[i, j].neighbors.Add(grid[i - 1, j]);
+                }
+                else    //Middle only
+                {
+                    grid[i, j].neighbors.Add(grid[i, j - 1]);
+                    grid[i, j].neighbors.Add(grid[i, j + 1]);
+                    grid[i, j].neighbors.Add(grid[i + 1, j]);
+                    grid[i, j].neighbors.Add(grid[i - 1, j]);
+                }
+            }
+        }
+    }
     
     public Node[,] Grid
     {
