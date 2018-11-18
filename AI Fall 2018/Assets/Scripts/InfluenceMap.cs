@@ -93,19 +93,20 @@ public class InfluenceMap : MonoBehaviour {
             {
 
                 
-
-                Color pixelColor;
                 /*
+                Color pixelColor;
+                
                 pixelColor.r = gridNodes[i, j].GetStrength() * 2;
                 pixelColor.g = 0;
                 pixelColor.b = 0;
-                */
+                
                 pixelColor.r = gridNodes[i, j].nodeColor.r * gridNodes[i, j].GetStrength();
                 pixelColor.g = gridNodes[i,j].nodeColor.g * gridNodes[i, j].GetStrength();
                 pixelColor.b = gridNodes[i, j].nodeColor.b * gridNodes[i, j].GetStrength();
                 pixelColor.a = 255;
+                */
           
-    /*
+    
                 Color pixelColor = new Color(0, 0, 0);
 
                 if(gridNodes[i, j].GetStrength() == 1)
@@ -136,7 +137,7 @@ public class InfluenceMap : MonoBehaviour {
                     pixelColor.b = 0;
                     pixelColor.a = 255;
                 }
-     */
+     
 
                 //ed1a9bb4a2df2f84fb5a9d2ec614563db8b6a9db
 
