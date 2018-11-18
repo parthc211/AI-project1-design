@@ -52,6 +52,7 @@ public class Spawner : MonoBehaviour {
                         //}
                         //Debug.Log("Positions:" + grid[i,j].Position) ;
 
+                        grid[i, j].CalculateStrength();
                     }
                 }
             }
@@ -88,4 +89,8 @@ public class Spawner : MonoBehaviour {
         }
     }
 
+    public Node[,] GetGrid()
+    {
+        return grid;
+    }
 }
