@@ -11,6 +11,8 @@ public class InfluenceMap : MonoBehaviour {
     public List<int> zPosNode = new List<int>();
     public GameObject TextureImage;
 
+    private const int STRENGTH_MAX = 4;
+
     //public Texture2D influenceMapTexture;
 
 	// Use this for initialization
@@ -23,10 +25,10 @@ public class InfluenceMap : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.G))
         {
-            CalculateLinearDrop();
-            CalculateLinearDrop();
-            CalculateLinearDrop();
-            CalculateLinearDrop();
+            for(int i = 0; i < STRENGTH_MAX; i++)
+            {
+                CalculateLinearDrop();
+            }
 
             TextureImage.SetActive(true);
 
