@@ -44,6 +44,7 @@ public class Spawner : MonoBehaviour {
                         
                         // Updates the node property. 
                         grid[i,j].AddUnit(units[current_unit]);
+                        
 
                         //Testing purpose. To check if the list is updated or not.
                         //foreach(string s in grid[i, j].GetUnits())

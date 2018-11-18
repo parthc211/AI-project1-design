@@ -8,6 +8,7 @@ public class Node {
     Vector3 position;
     List<string> units = null;
     int strength = 0;
+    public Color nodeColor;
 
     public Node(Vector3 pos)
     {
@@ -48,6 +49,15 @@ public class Node {
             else if(s.Equals("black"))
             {
                 strength += 4;
+            }
+
+            if(position.x > 0)
+            {
+                nodeColor = Color.red;
+            }
+            else
+            {
+                nodeColor = Color.green;
             }
         }
     }
