@@ -8,7 +8,8 @@ public class Node {
     Vector3 position;
     List<string> units = null;
     int strength = 0;
-    public Color nodeColor;
+    //public Color nodeColor;
+    public int winningTeamColor; //Color of winning influence value
 
     public List<Node> neighbors = new List<Node>();
 
@@ -34,6 +35,9 @@ public class Node {
 
     public void CalculateStrength()
     {
+        //value for how much influence a team has on a point. Values greater than 0 will have red influence, values less than 0 will have green influence 
+        
+
         foreach(string s in units)
         {
             if(s.Equals("white"))
@@ -52,20 +56,38 @@ public class Node {
             {
                 strength += 4;
             }
+            else if (s.Equals("gwhite"))
+            {
+                strength -= 1;
+                Debug.Log("gwhite");
+            }
+            else if (s.Equals("gblue"))
+            {
+                strength -= 2;
+                Debug.Log("gblue");
+            }
+            else if (s.Equals("gyellow"))
+            {
+                strength -= 3;
+                Debug.Log("gyellow");
+            }
+            else if (s.Equals("gblack"))
+            {
+                strength -= 4;
+                Debug.Log("gblack");
+            }
 
-            if(position.x > 0)
-            {
-                nodeColor = Color.red;
-            }
-            else
-            {
-                nodeColor = Color.green;
-            }
+            
         }
+        
 
-        if(strength > 4)
+        if (strength > 4)
         {
             strength = 4;
+        }
+        if(strength < -4)
+        {
+            strength = -4;
         }
     }
 

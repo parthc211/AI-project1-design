@@ -50,12 +50,22 @@ public class InfluenceMap : MonoBehaviour {
         {
             foreach (Node neighbor in n.neighbors)
             {
+                
                 if (n.GetStrength() > neighbor.GetStrength())
                 {
                     neighbor.SetStrength(n.GetStrength() - 1);
                     change++;
                     Debug.Log(change);
                 }
+                else if(n.GetStrength() < neighbor.GetStrength())
+                {
+                    //this one doesn't work
+                    neighbor.SetStrength(n.GetStrength() + 1);
+                    change--;
+                    Debug.Log(change);
+                }
+                
+
             }
         }
 
@@ -111,8 +121,17 @@ public class InfluenceMap : MonoBehaviour {
     
                 Color pixelColor = new Color(0, 0, 0);
 
-                if(gridNodes[i, j].GetStrength() == 1)
+                if (gridNodes[i, j].GetStrength() == 0)
                 {
+
+                    pixelColor.r = 200;
+                    pixelColor.g = 200;
+                    pixelColor.b = 200;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == 1)
+                {
+
                     pixelColor.r = 255;
                     pixelColor.g = 0;
                     pixelColor.b = 0;
@@ -139,9 +158,35 @@ public class InfluenceMap : MonoBehaviour {
                     pixelColor.b = 0;
                     pixelColor.a = 255;
                 }
-     
+                else if (gridNodes[i, j].GetStrength() == -1)
+                {
 
-                //ed1a9bb4a2df2f84fb5a9d2ec614563db8b6a9db
+                    pixelColor.r = 0;
+                    pixelColor.g = 255;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == -2)
+                {
+                    pixelColor.r = 0;
+                    pixelColor.g = 200;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == -3)
+                {
+                    pixelColor.r = 0;
+                    pixelColor.g = 150;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
+                else if (gridNodes[i, j].GetStrength() == -4)
+                {
+                    pixelColor.r = 0;
+                    pixelColor.g = 100;
+                    pixelColor.b = 0;
+                    pixelColor.a = 255;
+                }
 
                 influenceMapTexture.SetPixel(i, j, pixelColor);
             }
