@@ -7,7 +7,7 @@ using System;
 public class Spawner : MonoBehaviour {
 
     public GameObject[] prefabs;
-    public string[] units = { "black","yellow","blue","white"};
+    public string[] units = { "black","yellow","blue","white", "gblack", "gyellow", "gblue", "gwhite" };
     public Camera cam;
     
     int current_unit = 0;
@@ -44,6 +44,7 @@ public class Spawner : MonoBehaviour {
                         
                         // Updates the node property. 
                         grid[i,j].AddUnit(units[current_unit]);
+                        
 
                         //Testing purpose. To check if the list is updated or not.
                         //foreach(string s in grid[i, j].GetUnits())
