@@ -11,7 +11,7 @@ public class InfluenceMap : MonoBehaviour {
     public List<int> zPosNode = new List<int>();
     public GameObject TextureImage;
 
-    private const int STRENGTH_MAX = 4;
+    private const int STRENGTH_MAX = 8;
 
     //public Texture2D influenceMapTexture;
 
@@ -81,7 +81,7 @@ public class InfluenceMap : MonoBehaviour {
         {
             for (int j = 0; j < 100; j++)
             {
-                if(gridNodes[i, j].GetStrength() > 0)
+                if(gridNodes[i, j].GetStrength() > 0 || gridNodes[i, j].GetStrength() < 0)
                 {
                     nodes.Add(gridNodes[i, j]);
                 }
